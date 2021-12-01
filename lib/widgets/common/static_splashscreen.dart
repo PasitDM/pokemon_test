@@ -11,7 +11,7 @@ class StaticSplashScreen extends StatefulWidget {
     Key? key,
     this.imagePath,
     this.onNextScreen,
-    this.duration = 2500,
+    this.duration = 1000,
   }) : super(key: key);
 
   @override

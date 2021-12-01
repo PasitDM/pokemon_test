@@ -51,7 +51,8 @@ class _AppInitState extends State<AppInit> {
   }
 
   void goToNextScreen() {
-    Navigator.of(context).pushReplacementNamed(RouteList.dashboard);
+    Navigator.of(context).pushReplacementNamed(RouteList.home);
+    // Navigator.of(context).pushReplacementNamed(RouteList.dashboard);
   }
 
   void checkToShowNextScreen() {

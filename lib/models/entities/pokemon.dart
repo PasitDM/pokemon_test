@@ -8,14 +8,15 @@ class Pokemon {
   late final int count;
   late final String next;
   String? previous;
-  late final List<Results> results;
+  late final List<PokemonResults> results;
 
   Pokemon.fromJson(Map<String, dynamic> json) {
     count = json['count'];
     next = json['next'];
     previous = json['previous'];
-    results =
-        List.from(json['results']).map((e) => Results.fromJson(e)).toList();
+    results = List.from(json['results'])
+        .map((e) => PokemonResults.fromJson(e))
+        .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -28,15 +29,15 @@ class Pokemon {
   }
 }
 
-class Results {
-  Results({
+class PokemonResults {
+  PokemonResults({
     required this.name,
     required this.url,
   });
   late final String name;
   late final String url;
 
-  Results.fromJson(Map<String, dynamic> json) {
+  PokemonResults.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     url = json['url'];
   }

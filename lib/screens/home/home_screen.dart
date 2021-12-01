@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/entities/pokemon.dart';
+import '../../widgets/pokemon/pokemon_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var endPoint = '?';
       endPoint += 'offset=$_offset&limit=20';
       var url = 'https://pokeapi.co/api/v2/pokemon?$endPoint';
+      print('[Home] Url: $url');
 
       var response = await http.get(Uri.parse(url));
 
@@ -60,14 +62,20 @@ class _HomeScreenState extends State<HomeScreen> {
               // print('[Home] Res: ${snapshot.data!}');
               Pokemon data = snapshot.data;
 
-              return ListView.builder(
-                itemCount: data.results.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(data.results[index].name),
-                  );
-                },
+              return PokemonList(
+                pokemons: data.results,
+                onRefresh: onRefresh,
+                onLoadMore: onLoadMore,
               );
+
+              // return ListView.builder(
+              //   itemCount: data.results.length,
+              //   itemBuilder: (context, index) {
+              //     return ListTile(
+              //       title: Text(data.results[index].name),
+              //     );
+              //   },
+              // );
             } else {
               return const Text('No Data');
             }

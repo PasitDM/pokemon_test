@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pokemon.test.pokemon_test_pasit">
+    package="com.pokemon.test">
    <application
         android:label="pokemon_test_pasit"
         android:icon="@mipmap/ic_launcher">

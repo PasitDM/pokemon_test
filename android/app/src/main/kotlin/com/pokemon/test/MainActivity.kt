@@ -1,4 +1,4 @@
-package com.pokemon.test.pokemon_test_pasit
+package com.pokemon.test
 
 import io.flutter.embedding.android.FlutterActivity
 

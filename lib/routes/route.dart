@@ -9,6 +9,6 @@ class Routes {
 
   static final Map<String, WidgetBuilder> _routes = {
     RouteList.dashboard: (context) => const MainTabs(),
-    RouteList.home: (context) => const HomeScreen()
+    RouteList.pokedex: (context) => const PokedexScreen()
   };
 }

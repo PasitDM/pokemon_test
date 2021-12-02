@@ -1,12 +1,12 @@
 class Pokemon {
   Pokemon({
     required this.count,
-    required this.next,
+    this.next,
     this.previous,
     required this.results,
   });
   late final int count;
-  late final String next;
+  String? next;
   String? previous;
   late final List<PokemonResults> results;
 

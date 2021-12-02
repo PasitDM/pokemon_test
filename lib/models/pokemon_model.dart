@@ -1,3 +1,59 @@
 import 'package:flutter/material.dart';
 
-class PokemonModel with ChangeNotifier {}
+import '../services/service_api.dart';
+import 'entities/pokemon.dart';
+
+class PokemonModel with ChangeNotifier {
+  // list pokemons for pokemons screen
+  bool isFetching = false;
+  List<PokemonResults>? pokemonsList;
+  Pokemon? pokemon;
+  bool? isEnd;
+  String? errMsg;
+
+  Future getPokemonDetail(String url) async {
+    try {
+      final pokemon = ServiceAPI().fetchPokemonDetail(url);
+      return pokemon;
+    } catch (e) {
+      print('[PokeDel] getPokemonDetail Error: $e');
+    }
+  }
+
+  Future<void> getPokemonItems({bool loadMore = false}) async {
+    try {
+      isFetching = true;
+      isEnd = false;
+      notifyListeners();
+
+      print('[PokeDel] getPokemonItems pokemon $pokemon');
+      String? urlNext;
+      if (pokemon != null) {
+        print('[PokeDel] getPokemonItems pokemon != null');
+        urlNext = pokemon!.next;
+      }
+
+      final newPokemon = await ServiceAPI().fetchPokemons(urlNext);
+      // final newPokemon = await ServiceAPI().fetchPokemons(nextUrl);
+
+      if (!loadMore) {
+        pokemonsList = newPokemon!.results;
+        pokemon = newPokemon;
+      } else {
+        pokemonsList = [...pokemonsList!, ...newPokemon!.results];
+        pokemon = newPokemon;
+      }
+      isFetching = false;
+      errMsg = null;
+
+      print('[PokeDel] getPokemonItems Finish');
+
+      notifyListeners();
+    } catch (e) {
+      errMsg = 'There is an issue with the app during request the data ' +
+          e.toString();
+      isFetching = false;
+      print('[PokeDel] getPokemonItems Error: $e');
+    }
+  }
+}

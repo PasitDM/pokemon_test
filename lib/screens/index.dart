@@ -1,1 +1,1 @@
-export 'home/home_screen.dart';
+export 'pokedex/pokedex_screen.dart';

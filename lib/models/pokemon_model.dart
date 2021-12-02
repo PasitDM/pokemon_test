@@ -4,14 +4,13 @@ import '../services/service_api.dart';
 import 'entities/pokemon.dart';
 
 class PokemonModel with ChangeNotifier {
-  // list pokemons for pokemons screen
-  bool isFetching = false;
-  List<PokemonResults>? pokemonsList;
-  Pokemon? pokemon;
-  bool? isEnd;
-  String? errMsg;
+  bool isFetching = false; // เช็คว่ากำลังโหลดข้อมูลอยู่หรือไม่
+  List<PokemonResults>? pokemonsList; // list pokemon (result = [])
+  Pokemon? pokemon; // รวมข้อมูลทั้งหมดเช่น next, previous, results
+  bool? isEnd; // เช็คว่าสามารถโหลดโปรเกม่อนได้อีกหรือไม่
 
-  Future getPokemonDetail(String url) async {
+  // ดึงค่ารายละเอียดของ Pokemon ตัวนั้น ๆ
+  Future<Map?> getPokemonDetail(String url) async {
     try {
       final pokemon = ServiceAPI().fetchPokemonDetail(url);
       return pokemon;
@@ -20,6 +19,7 @@ class PokemonModel with ChangeNotifier {
     }
   }
 
+  // ดึงค่า list pokemon
   Future<void> getPokemonItems({bool loadMore = false}) async {
     try {
       isFetching = true;
@@ -35,22 +35,22 @@ class PokemonModel with ChangeNotifier {
 
       isEnd = newPokemon!.results.isEmpty || newPokemon.results.length < 20;
 
+      // ถ้า loadmore = false คือการ Refresh จะทำการ clear pokemonslist ใหม่
       if (!loadMore) {
         pokemonsList = newPokemon.results;
         pokemon = newPokemon;
-      } else {
+      }
+      // โหลดโปเกม่อนเพิ่ม
+      else {
         pokemonsList = [...pokemonsList!, ...newPokemon.results];
         pokemon = newPokemon;
       }
       isFetching = false;
-      errMsg = null;
 
       print('[PokeDel] getPokemonItems Finish: isEnd: $isEnd');
 
       notifyListeners();
     } catch (e) {
-      errMsg = 'There is an issue with the app during request the data ' +
-          e.toString();
       isFetching = false;
       print('[PokeDel] getPokemonItems Error: $e');
     }

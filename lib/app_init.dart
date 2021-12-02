@@ -22,6 +22,7 @@ class _AppInitState extends State<AppInit> {
     loadInitData();
   }
 
+  // โหลดข้อมูล สามารถโหลดข้อมูลจาก API ได้
   Future<void> loadInitData() async {
     try {
       print('[AppState] Init Data 💫');
@@ -40,11 +41,13 @@ class _AppInitState extends State<AppInit> {
     }
   }
 
+  // ไปหน้า Pokedex
   void goToNextScreen() {
     Navigator.of(context).pushReplacementNamed(RouteList.pokedex);
     // Navigator.of(context).pushReplacementNamed(RouteList.dashboard);
   }
 
+  // ถ้าโหลดภาพ splash screen เสร็ลแล้วให้ไปหน้าต่อไป
   void checkToShowNextScreen() {
     /// If the config was load complete then navigate to Dashboard
     hasLoadedSplash = true;

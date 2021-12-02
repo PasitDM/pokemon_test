@@ -7,17 +7,16 @@ import '../models/entities/pokemon.dart';
 class ServiceAPI {
   Future<Pokemon?> fetchPokemons({String? nextUrl}) async {
     try {
+      // ถ้า nextUrl == null ก็จะให้ใช้ api default
       var url = 'https://pokeapi.co/api/v2/pokemon';
       if (nextUrl != null) {
         url = nextUrl;
       }
-      // print('[Service] fetchPokemon Url: $url');
 
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         var item = Pokemon.fromJson(body);
-        // print('[Service] fetchPokemon Res: $item');
         return item;
       }
     } catch (e) {
@@ -31,8 +30,7 @@ class ServiceAPI {
 
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
-        // var item = Pokemon.fromJson(body);
-        // print('[Service] fetchPokemonDetail Res: $body');
+
         return body;
       }
     } catch (e) {

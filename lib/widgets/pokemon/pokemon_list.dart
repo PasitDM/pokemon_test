@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_test_pasit/widgets/pokemon/pokemon_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../common/constants.dart';
 import '../../models/entities/index.dart';
 import '../../models/pokemon_model.dart';
+import 'pokemon_bottom_sheet.dart';
 
 class PokemonList extends StatefulWidget {
   final List<PokemonResults>? pokemons;
@@ -64,6 +63,7 @@ class _PokemonListState extends State<PokemonList> {
     }
   }
 
+  // กด Tile แล้วจะแสดงรายละเอียด pokemon เป็นแบบ bottom sheet
   Future<void> onTapPokemon(String url) {
     return showModalBottomSheet(
       isScrollControlled: true,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_test_pasit/common/constants.dart';
-import 'package:pokemon_test_pasit/models/pokemon_model.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../common/constants.dart';
 import '../../models/entities/index.dart';
+import '../../models/pokemon_model.dart';
 
 class PokemonList extends StatefulWidget {
   final List<PokemonResults>? pokemons;
@@ -63,6 +63,129 @@ class _PokemonListState extends State<PokemonList> {
     }
   }
 
+  Future<void> onTapPokemon(String url) {
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        final pokemonModel = Provider.of<PokemonModel>(context, listen: false);
+
+        return FutureBuilder(
+          future: pokemonModel.getPokemonDetail(url),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.active:
+              case ConnectionState.waiting:
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              case ConnectionState.done:
+              default:
+                if (snapshot.hasError || snapshot.data == null) {
+                  return const SizedBox();
+                }
+
+                var item = snapshot.data;
+                var name = item['name'];
+                String frontImg = item['sprites']['front_default'];
+                String backImg = item['sprites']['back_default'];
+                int weight = item['weight'];
+                int height = item['height'];
+
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 5,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        name,
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FadeInImage.assetNetwork(
+                            image: frontImg,
+                            placeholder: kLoadPokemon,
+                            // child: Image.network(frontImg),
+                          ),
+                          FadeInImage.assetNetwork(
+                            image: backImg,
+                            placeholder: kLoadPokemon,
+                            // child: Image.network(frontImg),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: 'Weight: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '$weight',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Height: ',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: '$height',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+            }
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final pokemonList = widget.pokemons;
@@ -105,133 +228,7 @@ class _PokemonListState extends State<PokemonList> {
         itemCount: pokemonList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            onTap: () {
-              showModalBottomSheet(
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                ),
-                context: context,
-                builder: (context) {
-                  final pokemonModel =
-                      Provider.of<PokemonModel>(context, listen: false);
-
-                  return FutureBuilder(
-                    future:
-                        pokemonModel.getPokemonDetail(pokemonList[index].url),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                        case ConnectionState.active:
-                        case ConnectionState.waiting:
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        case ConnectionState.done:
-                        default:
-                          if (snapshot.hasError || snapshot.data == null) {
-                            return const SizedBox();
-                          }
-
-                          print('[PokeList] snapshot: ${snapshot.data}');
-                          var item = snapshot.data;
-
-                          var name = pokemonList[index].name;
-                          String frontImg = item['sprites']['front_default'];
-                          String backImg = item['sprites']['back_default'];
-                          int weight = item['weight'];
-                          int height = item['height'];
-
-                          return Container(
-                            padding: const EdgeInsets.all(8),
-                            height: MediaQuery.of(context).size.height * 0.4,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 5,
-                                  width: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  name,
-                                  style: Theme.of(context).textTheme.headline5,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    FadeInImage.assetNetwork(
-                                      image: frontImg,
-                                      placeholder: kLoadPokemon,
-                                      // child: Image.network(frontImg),
-                                    ),
-                                    FadeInImage.assetNetwork(
-                                      image: backImg,
-                                      placeholder: kLoadPokemon,
-                                      // child: Image.network(frontImg),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        text: 'Weight: ',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: '$weight',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: 'Height: ',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        children: [
-                                          TextSpan(
-                                            text: '$height',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                      }
-                    },
-                  );
-                },
-              );
-            },
+            onTap: () => onTapPokemon(pokemonList[index].url),
             title: Text(pokemonList[index].name),
           );
         },

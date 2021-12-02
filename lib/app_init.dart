@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'common/constants.dart';
-import 'models/app_model.dart';
 import 'widgets/common/splash_screen.dart';
 
 class AppInit extends StatefulWidget {
@@ -28,15 +26,7 @@ class _AppInitState extends State<AppInit> {
     try {
       print('[AppState] Init Data 💫');
 
-      /// set the server config at first loading
-      /// Load App model config
-      // appConfig =
-      //     await Provider.of<AppModel>(context, listen: false).loadAppConfig();
-
       Future.delayed(Duration.zero, () {
-        /// Load more Category/Blog/Attribute Model beforehand
-        // final lang = Provider.of<AppModel>(context, listen: false).langCode;
-
         hasLoadedData = true;
         if (hasLoadedSplash) {
           goToNextScreen();

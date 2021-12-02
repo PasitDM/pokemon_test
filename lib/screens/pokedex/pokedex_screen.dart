@@ -23,11 +23,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
 
   Future<void> onRefresh() async {
     _more = false;
-
-    print('[Pokedex] onRefresh Ready');
     await Provider.of<PokemonModel>(context, listen: false).getPokemonItems();
-    print('[Pokedex] onRefresh Finish');
-
     return;
   }
 

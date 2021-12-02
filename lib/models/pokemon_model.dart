@@ -26,10 +26,8 @@ class PokemonModel with ChangeNotifier {
       isEnd = false;
       notifyListeners();
 
-      print('[PokeDel] getPokemonItems pokemon $pokemon');
       String? nextUrl;
       if (pokemon != null && loadMore) {
-        print('[PokeDel] getPokemonItems pokemon != null');
         nextUrl = pokemon!.next;
       }
 

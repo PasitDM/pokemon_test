@@ -27,26 +27,27 @@ class PokemonModel with ChangeNotifier {
       notifyListeners();
 
       print('[PokeDel] getPokemonItems pokemon $pokemon');
-      String? urlNext;
-      if (pokemon != null) {
+      String? nextUrl;
+      if (pokemon != null && loadMore) {
         print('[PokeDel] getPokemonItems pokemon != null');
-        urlNext = pokemon!.next;
+        nextUrl = pokemon!.next;
       }
 
-      final newPokemon = await ServiceAPI().fetchPokemons(urlNext);
-      // final newPokemon = await ServiceAPI().fetchPokemons(nextUrl);
+      final newPokemon = await ServiceAPI().fetchPokemons(nextUrl: nextUrl);
+
+      isEnd = newPokemon!.results.isEmpty || newPokemon.results.length < 20;
 
       if (!loadMore) {
-        pokemonsList = newPokemon!.results;
+        pokemonsList = newPokemon.results;
         pokemon = newPokemon;
       } else {
-        pokemonsList = [...pokemonsList!, ...newPokemon!.results];
+        pokemonsList = [...pokemonsList!, ...newPokemon.results];
         pokemon = newPokemon;
       }
       isFetching = false;
       errMsg = null;
 
-      print('[PokeDel] getPokemonItems Finish');
+      print('[PokeDel] getPokemonItems Finish: isEnd: $isEnd');
 
       notifyListeners();
     } catch (e) {

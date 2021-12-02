@@ -4,3 +4,6 @@ import '../constants.dart';
 const kSplashScreen = 'assets/images/splashscreen.png';
 
 const kSplashScreenType = SplashScreenTypeConstants.static;
+
+/// pokemon
+const kLoadPokemon = 'assets/images/block_img.png';

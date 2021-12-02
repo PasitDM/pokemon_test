@@ -33,7 +33,8 @@ class _PokedexScreenState extends State<PokedexScreen> {
 
   void onLoadMore() {
     _more = true;
-    Provider.of<PokemonModel>(context).getPokemonItems(loadMore: _more);
+    Provider.of<PokemonModel>(context, listen: false)
+        .getPokemonItems(loadMore: _more);
   }
 
   @override
@@ -44,6 +45,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
       appBar: AppBar(
         title: const Text('Pokedex'),
         centerTitle: true,
+        elevation: 0,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {

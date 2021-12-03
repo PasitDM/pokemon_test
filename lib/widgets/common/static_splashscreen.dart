@@ -19,14 +19,7 @@ class StaticSplashScreen extends StatefulWidget {
 }
 
 class _StaticSplashScreenState extends State<StaticSplashScreen> {
-//   @override
-//   void afterFirstLayout(BuildContext context) {
-//     Future.delayed(Duration(milliseconds: widget.duration), () {
-//       widget.onNextScreen!();
-// //      Navigator.of(context).pushReplacement(
-// //          MaterialPageRoute(builder: (context) => widget.onNextScreen));
-//     });
-//   }
+
 
   @override
   void initState() {
